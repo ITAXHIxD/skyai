@@ -18,6 +18,21 @@
         ::-webkit-scrollbar-track {
             background-color: #343541; /* Color of the track */
         }
+
+        /* Responsive design for small screens */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .chat-container {
+                width: 100%;
+            }
+
+            .input-section {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body style="display: flex; justify-content: center; align-items: center; background-color: #343541; margin: 0; padding: 0; height: 100vh; font-family: Arial, sans-serif; color: #d1d5db;">
@@ -43,7 +58,7 @@
     <!-- Socket.IO Client -->
     <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
     <script>
-        const socket = io('https://your-heroku-app.herokuapp.com');
+        const socket = io('https://your-heroku-app.herokuapp.com'); // Replace with actual server URL
         const chatBox = document.getElementById('chat-box');
         const userInput = document.getElementById('user-input');
         const sendBtn = document.getElementById('send-btn');
@@ -95,12 +110,14 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }
     
-        // Send message function
+        // Send message function with delay before showing loading indicator
         function sendMessage() {
             const message = userInput.value.trim();
             if (message) {
                 appendMessage('user', message);
-                loadingIndicator.style.display = 'block';
+                setTimeout(() => {
+                    loadingIndicator.style.display = 'block';
+                }, 300); // Delay loading indicator
     
                 socket.emit('message', message);
                 userInput.value = '';

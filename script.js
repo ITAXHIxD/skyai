@@ -13,17 +13,21 @@ app.use(express.static('public'));
 io.on('connection', (socket) => {
     console.log('A user connected');
 
+    // Listening for messages from the client
     socket.on('message', (msg) => {
         console.log('Message from user:', msg);
-        // Respond to the user
+        
+        // Respond to the user (echo back the message)
         socket.emit('response', `Echo: ${msg}`);
     });
 
+    // Handle disconnection
     socket.on('disconnect', () => {
         console.log('User disconnected');
     });
 });
 
+// Set the port and start the server
 const port = 3000;
 server.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
