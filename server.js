@@ -5,6 +5,7 @@ const CharacterAI = require("node_characterai");
 const fs = require("fs");
 const PlayHT = require("playht");
 const path = require("path");
+const cors = require("cors"); // Import cors
 
 const app = express();
 const server = http.createServer(app);
@@ -26,6 +27,9 @@ const streamingOptions = {
   outputFormat: 'mp3',
   speed: 0.8,
 };
+
+// Enable CORS for all domains (you can restrict this to specific domains later)
+app.use(cors());  // Add this line to enable CORS for all origins
 
 // Serve static files
 app.use(express.static("public"));
