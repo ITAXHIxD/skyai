@@ -30,9 +30,9 @@ const streamingOptions = {
 // Serve static files (other assets like images, JS, and CSS files)
 app.use(express.static("public"));
 
-// Serve index.html from a different folder or the root
+// Serve index.html from the same directory as server.js
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html")); // Adjust path if necessary
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
 (async () => {
