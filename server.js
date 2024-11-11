@@ -4,6 +4,7 @@ const socketIo = require("socket.io");
 const CharacterAI = require("node_characterai");
 const fs = require("fs");
 const PlayHT = require("playht");
+const path = require("path");
 
 const app = express();
 const server = http.createServer(app);
@@ -26,7 +27,13 @@ const streamingOptions = {
   speed: 0.8,
 };
 
+// Serve static files (other assets like images, JS, and CSS files)
 app.use(express.static("public"));
+
+// Serve index.html from a different folder or the root
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html")); // Adjust path if necessary
+});
 
 (async () => {
   try {
