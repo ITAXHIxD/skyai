@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyAI</title>
+    <style>
+        /* Custom Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px; /* Width of the scrollbar */
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #565869; /* Color of the scrollbar */
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: #343541; /* Color of the track */
+        }
+    </style>
+</head>
+<body style="display: flex; justify-content: center; align-items: center; background-color: #343541; margin: 0; padding: 0; height: 100vh; font-family: Arial, sans-serif; color: #d1d5db;">
+
+    <div style="display: flex; flex-direction: column; width: 100%; max-width: 1300px; height: 85vh; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); background-color: #40414f;">
+        
+        <!-- Chat Box Area -->
+        <div id="chat-box" style="flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 15px;"> 
+
+            <!-- Placeholder for messages -->
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loading-indicator" style="display: none; padding: 10px; text-align: center; font-size: 14px;">SkyAI Typing...</div>
+
+        <!-- Input Section -->
+        <div style="display: flex; align-items: center; padding: 15px; background-color: #444654; border-top: 1px solid #565869;">
+            <input type="text" id="user-input" placeholder="Type a message..." style="flex: 1; padding: 12px; font-size: 14px; border-radius: 6px; border: none; outline: none; background-color: #3a3b4f; color: #d1d5db; margin-right: 10px;">
+            <button id="send-btn" style="padding: 10px 16px; font-size: 14px; border-radius: 6px; border: none; background-color: #10a37f; color: #fff; cursor: pointer;">Send</button>
+        </div>
+    </div>
+
+    <!-- Socket.IO Client -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const loadingIndicator = document.getElementById('loading-indicator');
+    
+        // Append message with separate audio button box
+        function appendMessage(sender, message) {
+            const messageContainer = document.createElement('div');
+            messageContainer.style.display = 'flex';
+            messageContainer.style.alignItems = 'flex-start';
+            messageContainer.style.marginBottom = '10px';
+            messageContainer.style.flexDirection = sender === 'user' ? 'row-reverse' : 'row';
+    
+            const avatar = document.createElement('div');
+            avatar.style.width = '36px';
+            avatar.style.height = '36px';
+            avatar.style.borderRadius = '50%';
+            avatar.style.backgroundSize = 'cover';
+            avatar.style.margin = sender === 'user' ? '0 0 0 12px' : '0 12px 0 0';
+            avatar.style.backgroundImage = sender === 'user' ? "url('/static/images/default.jpg')" : "url('/static/images/bot_pfp.jpg')";
+    
+            const textContainer = document.createElement('div');
+            textContainer.style.display = 'flex';
+            textContainer.style.flexDirection = 'column';
+            textContainer.style.alignItems = sender === 'user' ? 'flex-end' : 'flex-start';
+    
+            const label = document.createElement('div');
+            label.style.fontSize = '15px';
+            label.style.color = '#a0a3a8';
+            label.style.marginBottom = '4px';
+            label.textContent = sender === 'user' ? 'You:' : 'SkyAI:';
+    
+            const messageBubble = document.createElement('div');
+            messageBubble.style.padding = '12px';
+            messageBubble.style.borderRadius = '12px';
+            messageBubble.style.maxWidth = '70%';
+            messageBubble.style.wordWrap = 'break-word';
+            messageBubble.style.backgroundColor = sender === 'user' ? '#3a3b4f' : '#565869';
+            messageBubble.style.color = '#d1d5db';
+            messageBubble.textContent = message;
+            messageBubble.style.textAlign = sender === 'user' ? 'right' : 'left';
+
+            textContainer.appendChild(label);
+            textContainer.appendChild(messageBubble);
+            messageContainer.appendChild(avatar);
+            messageContainer.appendChild(textContainer);
+            chatBox.appendChild(messageContainer);
+
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    
+        // Send message function
+        function sendMessage() {
+            const message = userInput.value.trim();
+            if (message) {
+                appendMessage('user', message);
+                loadingIndicator.style.display = 'block';
+    
+                socket.emit('message', message);
+                userInput.value = '';
+            }
+        }
+    
+        // Receive response from server
+        socket.on('response', (response) => {
+            appendMessage('SkyAI', response);
+            loadingIndicator.style.display = 'none';
+        });
+
+        // Event listeners
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+    
+</body>
+</html>

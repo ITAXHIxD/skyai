@@ -1,0 +1,22 @@
+{
+  "name": "webappfinal",
+  "version": "1.0.0",
+  "description": "This project is a chat application that integrates Character.ai's unofficial API for generating AI responses and PlayHT for converting those responses into audio files. It is built using Node.js, HTML, CSS, and JavaScript.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "fs": "^0.0.1-security",
+    "node_characterai": "^1.2.7",
+    "playht": "^0.9.8",
+    "socket.io": "^4.8.1",
+    "webappfinal": "file:"
+  }
+}
