@@ -15,8 +15,8 @@ const characterAI = new CharacterAI();
 
 // Initialize PlayHT API with your credentials
 PlayHT.init({
-  apiKey: 'YOUR_API_KEY',
-  userId: 'YOUR_USER_ID',
+  apiKey: '5f7e888cad31c3d34d6cf3d24d4ad8af2da7656d',
+  userId: '5f7e888cad31c3d34d6cf3d24d4ad8af2da7656d',
 });
 
 // Configure streaming options
@@ -39,9 +39,9 @@ app.get("/", (req, res) => {
 
 (async () => {
   try {
-    await characterAI.authenticateWithToken("YOUR_TOKEN");
+    await characterAI.authenticateWithToken("5f7e888cad31c3d34d6cf3d24d4ad8af2da7656d");
 
-    const characterId = "YOUR_CHARACTER_ID";
+    const characterId = "cRAvvtl-Qhqe2sNG-ryFcYha_glY0GQCxd5AGxPpyNA";
     const chat = await characterAI.createOrContinueChat(characterId);
 
     io.on("connection", (socket) => {
